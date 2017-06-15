@@ -1,3 +1,10 @@
+**ADAPTED FROM SITEPOINTS TUTORIAL ON NODEJS AND OPENCV**
+CHANGES:
+-  Can detect the face closest to the camera
+- saves that face to your local computer
+*************************
+
+
 #Face Detection with Node.js 
 
 A simple application showing how face detection can be implemented using Node.js.

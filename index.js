@@ -173,6 +173,22 @@ app.post('/upload', upload.single('file'), function(req, res, next){
       /**
        * We're all good; render the result page.
        */
+       for (var i = 0; i < faces.length; i++) {
+       face = faces[i];
+       if((face.height) > max ) {
+         max = (face.height);
+         index = i;
+         bigFace = faces[index];
+         console.log("hry");
+       }
+     }
+     jimp.read(dst).then(function (image) {
+       image.crop(bigFace.x, bigFace.y,bigFace.width, bigFace.height);
+       image.write('./cropped/croppedImg2.jpg');
+      }).catch(function (err) {
+        console.error(err);
+      });
+
       return res.render(
         'result',
         {
@@ -180,22 +196,7 @@ app.post('/upload', upload.single('file'), function(req, res, next){
           faces     :   faces
         }
       );
-      for (var i = 0; i < faces.length; i++) {
-     face = faces[i];
-     if((face.height) >= max ) {
-       max = (face.height);
-       index = i;
-       bigFace = faces[index];
-     }
-   }
-  jimp.read(dst, function (err, image) {
-    image.crop(bigFace.x, bigFace.y,bigFace.width, bigFace.height );
-    image.write('./cropped/croppedImg.jpg');
-  });
-
-    }
-  );
-
+ });
 });
 
 /**

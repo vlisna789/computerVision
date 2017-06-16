@@ -149,9 +149,24 @@ app.post('/upload', upload.single('file'), function(req, res, next){
         /**
          * Run the face detection algorithm
          */
-        im.detectObject( cv.FACE_CASCADE, {}, callback );
-
+        im.detectObject(cv.FACE_CASCADE, {}, function(err, faces) {
+         if (err) throw err;
+         for (var i = 0; i < faces.length; i++) {
+         face = faces[i];
+           if((face.height) > max ) {
+            max = (face.height);
+            index = i;
+            bigFace = faces[index];
+           }
+         }
+         console.log("90");
+         im.ellipse(bigFace.x + bigFace.width / 2, bigFace.y + bigFace.height / 2, bigFace.width / 2, bigFace.height / 2, [0, 255, 0], 3);
+         //im.save("./fullimage/fullRender.jpg");
+         im.detectObject( cv.FACE_CASCADE, {}, callback );
+       });
+       //im.detectObject( cv.FACE_CASCADE, {}, callback );
       }
+
 
     ],
     function( err, faces ) {
@@ -179,7 +194,6 @@ app.post('/upload', upload.single('file'), function(req, res, next){
          max = (face.height);
          index = i;
          bigFace = faces[index];
-         console.log("hry");
        }
      }
      jimp.read(dst).then(function (image) {
@@ -188,6 +202,7 @@ app.post('/upload', upload.single('file'), function(req, res, next){
       }).catch(function (err) {
         console.error(err);
       });
+
 
       return res.render(
         'result',
